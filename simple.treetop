@@ -37,7 +37,7 @@ grammar Simple
 		'if (' condition:expression ') { ' consequence:statement
 			' } else { ' alternative:statement ' }' {
 			def to_ast
-				If.new(condition.to_ast, alternative.to_ast)
+				If.new(condition.to_ast, consequence.to_ast, alternative.to_ast)
 			end
 		}
 	end
