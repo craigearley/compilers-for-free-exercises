@@ -57,3 +57,29 @@ class Assign
 	end
 end
 
+class Sequence
+	def evaluate(environment)
+		second.evaluate(first.evaluate(environment))
+	end
+end
+
+class If
+	def evaluate(environment)
+		if condition.evaluate(environment)
+			consequence.evaluate(environment)
+		else
+			alternative.evaluate(environment)
+		end
+	end
+end
+
+class While
+	def evaluate(environment)
+		if condition.evaluate(environment)
+			evaluate(body.evaluate(environment))
+		else
+			environment
+		end
+	end
+end
+
