@@ -1,0 +1,67 @@
+grammar Simple
+	rule statement
+		sequence
+	end
+
+	rule sequence
+		first:sequenced_statement '; ' second:sequence
+		/
+		sequenced_statement
+	end
+
+	rule sequenced_statement
+		while / assign / if
+	end
+
+	rule while
+		'while (' condition:expression ') { ' body:statement ' }'
+	end
+
+	rule assign
+		name:[a-z]+ ' = ' expression
+	end
+
+	rule if
+		'if (' condition:expression ') { ' consequence:statement
+			' } else { ' alternative:statement ' }'
+	end
+
+	rule expression
+		less_than
+	end
+
+	rule less_than
+		left:add ' < ' right:less_than
+		/
+		add
+	end
+
+	rule add
+		left:multiply ' + ' right:add
+		/
+		multiply
+	end
+
+	rule multiply
+		left:term ' * ' right:multiply
+		/
+		term
+	end
+
+	rule term
+		number / boolean /variable
+	end
+
+	rule number
+		[0-9]+
+	end
+
+	rule boolean
+		('true' / 'false') ![a-z]
+	end
+
+	rule variable
+		[a-z]+
+	end
+end
+
