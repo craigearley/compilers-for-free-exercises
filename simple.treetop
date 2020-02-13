@@ -4,7 +4,11 @@ grammar Simple
 	end
 
 	rule sequence
-		first:sequenced_statement '; ' second:sequence
+		first:sequenced_statement '; ' second:sequence {
+			def to_ast
+				Sequence.new(first.to_ast, second.to_ast)
+			end
+		}
 		/
 		sequenced_statement
 	end
@@ -14,16 +18,28 @@ grammar Simple
 	end
 
 	rule while
-		'while (' condition:expression ') { ' body:statement ' }'
+		'while (' condition:expression ') { ' body:statement ' }' {
+			def to_ast
+				While.new(condition.to_ast, body.to_ast)
+			end
+		}
 	end
 
 	rule assign
-		name:[a-z]+ ' = ' expression
+		name:[a-z]+ ' = ' expression {
+			def to_ast
+				Assign.new(name.text_value.to_sym, expression.to_ast)
+			end
+		}
 	end
 
 	rule if
 		'if (' condition:expression ') { ' consequence:statement
-			' } else { ' alternative:statement ' }'
+			' } else { ' alternative:statement ' }' {
+			def to_ast
+				If.new(condition.to_ast, alternative.to_ast)
+			end
+		}
 	end
 
 	rule expression
@@ -31,19 +47,31 @@ grammar Simple
 	end
 
 	rule less_than
-		left:add ' < ' right:less_than
+		left:add ' < ' right:less_than {
+			def to_ast
+				LessThan.new(left.to_ast, right.to_ast)
+			end
+		}
 		/
 		add
 	end
 
 	rule add
-		left:multiply ' + ' right:add
+		left:multiply ' + ' right:add {
+			def to_ast
+				Add.new(left.to_ast, right.to_ast)
+			end
+		}
 		/
 		multiply
 	end
 
 	rule multiply
-		left:term ' * ' right:multiply
+		left:term ' * ' right:multiply {
+			def to_ast
+				Multiply.new(left.to_ast, right.to_ast)
+			end
+		}
 		/
 		term
 	end
