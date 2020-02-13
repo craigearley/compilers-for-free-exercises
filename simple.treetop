@@ -53,18 +53,6 @@ grammar Simple
 	end
 
 	rule number
-		[0-9]+
-	end
-
-	rule boolean
-		('true' / 'false') ![a-z]
-	end
-
-	rule variable
-		[a-z]+
-	end
-
-	rule number
 		[0-9]+ {
 			def to_ast
 				Number.new(text_value.to_i)
