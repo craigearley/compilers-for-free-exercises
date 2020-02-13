@@ -63,5 +63,29 @@ grammar Simple
 	rule variable
 		[a-z]+
 	end
+
+	rule number
+		[0-9]+ {
+			def to_ast
+				Number.new(text_value.to_i)
+			end
+		}
+	end
+
+	rule boolean
+		('true' / 'false') ![a-z] {
+			def to_ast
+				Boolean.new(text_value == 'true')
+			end
+		}
+	end
+
+	rule variable
+		[a-z]+ {
+			def to_ast
+				Variable.new(text_value.to_sym)
+			end
+		}
+	end
 end
 
