@@ -1,15 +1,52 @@
-Number    = Struct.new :value
-Boolean   = Struct.new :value
-Variable  = Struct.new :name
+Number	= Struct.new :value
+require('treetop')
 
-Add       = Struct.new :left, :right
+Treetop.load('simple.treetop')
+
+Boolean  = Struct.new :value
+Variable = Struct.new :name
+
+Add	  = Struct.new :left, :right
 Multiply  = Struct.new :left, :right
 LessThan  = Struct.new :left, :right
 
-Assign    = Struct.new :name, :expression
-If        = Struct.new :condition, :consequence, :alternative
-Sequence  = Struct.new :first, :second
-While     = Struct.new :condition, :body
+Assign	= Struct.new :name, :expression
+If	= Struct.new :condition, :consequence, :alternative
+Sequence = Struct.new :first, :second
+While	 = Struct.new :condition, :body
 
-require('treetop')
-Treetop.load('simple.treetop')
+class Number
+	def evaluate(environment)
+		value
+	end
+end
+
+class Boolean
+	def evaluate(environment)
+		value
+	end
+end
+
+class Variable
+	def evaluate(environment)
+		environment[name]
+	end
+end
+
+class Add
+	def evaluate(environment)
+		left.evaluate(environment) + right.evaluate(environment)
+	end
+end
+
+class Multiply
+	def evaluate(environment)
+		left.evaluate(environment) * right.evaluate(environment)
+	end
+end
+
+class LessThan
+	def evaluate(environment)
+		left.evaluate(environment) < right.evaluate(environment)
+	end
+end
