@@ -10,3 +10,6 @@ Assign    = Struct.new :name, :expression
 If        = Struct.new :condition, :consequence, :alternative
 Sequence  = Struct.new :first, :second
 While     = Struct.new :condition, :body
+
+require('treetop')
+Treetop.load('simple.treetop')
