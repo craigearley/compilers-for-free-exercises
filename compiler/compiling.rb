@@ -47,11 +47,17 @@ class Add
 	def evaluate(environment)
 		left.evaluate(environment) + right.evaluate(environment)
 	end
+	def to_javascript
+		"function (e) { return #{left.to_javascript}(e) + #{right.to_javascript}(e); }"
+	end
 end
 
 class Multiply
 	def evaluate(environment)
 		left.evaluate(environment) * right.evaluate(environment)
+	end
+	def to_javascript
+		"function (e) { return #{left.to_javascript}(e) * #{right.to_javascript}(e); }"
 	end
 end
 
@@ -59,17 +65,26 @@ class LessThan
 	def evaluate(environment)
 		left.evaluate(environment) < right.evaluate(environment)
 	end
+	def to_javascript
+		"function (e) { return #{left.to_javascript}(e) < #{right.to_javascript}(e); }"
+	end
 end
 
 class Assign
 	def evaluate(environment)
 		environment.merge({ name => expression.evaluate(environment) })
 	end
+	def to_javascript
+		"function (e) { e[#{JSON.dump(name)}] = #{expression.to_javascript}(e); return e; }"
+	end
 end
 
 class Sequence
 	def evaluate(environment)
 		second.evaluate(first.evaluate(environment))
+	end
+	def to_javascript
+		"function (e) { return #{second.to_javascript}(#{first.to_javascript}(e)); }"
 	end
 end
 
@@ -81,6 +96,12 @@ class If
 			alternative.evaluate(environment)
 		end
 	end
+	def to_javascript
+		"function (e) { if (#{condition.to_javascript}(e))" + 
+			" { return #{consequence.to_javascript}(e); }" + 
+			" else { return #{alternative.to_javascript}(e); }" +
+			' }'
+	end
 end
 
 class While
@@ -90,6 +111,12 @@ class While
 		else
 			environment
 		end
+	end
+	def to_javascript
+		'function (e) {' +
+			" while (#{condition.to_javascript}(e)) { e = #{body.to_javascript}(e); }" +
+			' return e;' +
+		' }'
 	end
 end
 
