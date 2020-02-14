@@ -1,8 +1,8 @@
-def power(n, x)
-	if n.zero?
+def power_5(x)
+	if 5.zero?
 		1
 	else
-		x * power(n - 1, x)
+		x * power(5 - 1, x)
 	end
 end
 
