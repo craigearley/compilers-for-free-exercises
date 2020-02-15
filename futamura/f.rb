@@ -131,5 +131,26 @@ end
 source, environment = read_source, read_environment
 
 Treetop.load('simple.treetop')
+environment = read_environment
+
+# initial step
 ast = SimpleParser.new.parse(source).to_ast
 puts ast.evaluate(environment)
+
+# step after copy propagation and expression's replacement with AST
+ast = Sequence.new(
+		Assign.new(
+		  :x,
+		  Number.new(2)
+		),
+		Assign.new(
+		  :y,
+		  Multiply.new(
+			Variable.new(:x),
+			Number.new(3)
+		  )
+		)
+	  )
+puts ast.evaluate(environment)
+
+
