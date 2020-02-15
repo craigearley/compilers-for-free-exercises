@@ -6,6 +6,11 @@ def read_environment
 	{}
 end
 
+def evaluate(environment)
+	environment = environment.erge({ :x => 2 })
+	environment.merge({ :y => environment[:x] * 3 })
+end
+
 Number	= Struct.new :value
 require('treetop')
 require('json')
@@ -132,6 +137,10 @@ source, environment = read_source, read_environment
 
 Treetop.load('simple.treetop')
 environment = read_environment
+
+# first Futamura projection
+environment = environment.merge({ :x => 2 })
+puts environment.merge({ :y => environment[:x] * 3 })
 
 # initial step
 ast = SimpleParser.new.parse(source).to_ast
